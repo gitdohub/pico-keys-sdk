@@ -182,6 +182,12 @@ int phy_save(void) {
 }
 
 int phy_load(void) {
+#ifdef ESP_PLATFORM
+    if (!phy_data.up_btn_present) {
+        phy_data.up_btn         = 0;    // T-Dongle-S3 Boot key GPIO0
+        phy_data.up_btn_present = true;
+    }
+#endif
     if (file_has_data(ef_phy)) {
         return phy_unserialize_data(file_get_data(ef_phy), file_get_size(ef_phy), &phy_data);
     }
